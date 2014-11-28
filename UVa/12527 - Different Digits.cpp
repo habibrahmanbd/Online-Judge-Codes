@@ -1,0 +1,41 @@
+#include<stdio.h>
+int main()
+{
+    int n,m,rem[11],i,k,l,count,final_count,temp_count,j,temp,num;
+    while((scanf("%d%d",&n,&m))==2)
+    {
+        temp=n<m?n:m;
+        m=m>n?m:n;
+        n=temp;
+        final_count=0;
+        for(i=n;i<=m;i++)
+        {
+            num=i;
+            j=0;
+            while(num>0)
+            {
+                rem[j]=num%10;
+                num/=10;
+                j++;
+            }
+            j--;
+            if(j<=9)
+            {
+            temp_count=0;
+            for(k=0;k<=j;k++){
+                count=0;
+                for(l=0;l<=j;l++){
+                    if(rem[k]==rem[l])
+                        count++;
+                }
+            if(count==1)
+                temp_count++;
+            }
+            if(temp_count==j+1)
+                final_count++;
+            }
+        }
+        printf("%d\n",final_count);
+    }
+    return 0;
+}
