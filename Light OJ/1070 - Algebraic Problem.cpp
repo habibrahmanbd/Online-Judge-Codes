@@ -2,8 +2,8 @@ using namespace std;
 #include<bits/stdc++.h>
 
 #define db          double
-#define ll          long long
-#define ull         unsigned long long
+//#define ll          long long
+#define ll         unsigned long long
 
 #define vi          vector<int>
 #define vl          vector<long>
@@ -81,39 +81,89 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 //ll dy[]={-1, 0, +1, +1, +1, 0, -1, -1};
 
 //------------------------------------------------------
+struct matrix
+{
+    ll row,col;
+    ll mat[6][6];
+    matrix(ll _row=0,ll _col=0)
+    {
+        row=_row;
+        col=_col;
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                mat[i][j]=0;
+    }
+    matrix operator*(const matrix &B)const
+    {
+        ll i,j,k;
+        matrix temp(row,B.col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<B.col; j++)
+                for(ll k=0; k<col; k++)
+                    temp.mat[i][j]=temp.mat[i][j]+
+                                   (mat[i][k]*B.mat[k][j]);
+        return temp;
+    }
+    matrix operator+(const matrix &B)const
+    {
+        ll i,j;
+        matrix temp(row,col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                temp.mat[i][j]=(mat[i][j]+B.mat[i][j]);
+        return temp;
+    }
+};
+matrix PowerMat(matrix A,ll P)
+{
+    ll i;
+    matrix R(A.row,A.col);
+    for(ll i=0; i<R.row; i++)
+        R.mat[i][i]=1;
+    while(P)
+    {
+        if(P&1) R=(R*A);
+        P>>=1;
+        A=(A*A);
+    }
+    return R;
+}
 
 
 int main()
 {
     _F_in;
+    _F_out;
     ll t=ILL;
     for(ll cs=1; cs<=t; cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
-        for(ll i=1; i<=n; i++)
+        ll p=ILL, q=ILL,n=ILL;
+        if(n>2)
         {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
+            matrix A(2,2), B(2,1), C(2,1), D(2,2);
+            A.mat[0][0]=p;
+            A.mat[0][1]=-q;
+            A.mat[1][0]=1;
+            A.mat[1][1]=0;
+
+            B.mat[1][0]=p;
+            B.mat[0][0]=(p*p)-(2*q);
+
+            D = PowerMat(A, n-2);
+
+            C = D*B;
+
+            pf("Case %llu: %llu\n",cs,(ll)C.mat[0][0]);
         }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
+        else
         {
-            if(Arr[i]!=i)
-            {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
-            }
+            if(n==1)
+                pf("Case %llu: %llu\n",cs,(ll)p);
+            else if(n==2)
+                pf("Case %llu: %llu\n",cs,(ll)(p*p-(2*q)));
+            else if(n==0)
+                pf("Case %llu: 2\n",cs);
         }
-        pf("Case %lld: %lld\n",cs, count);
     }
     return 0;
 }

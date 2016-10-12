@@ -42,7 +42,7 @@ using namespace std;
 #define _F_out      freopen("out.txt","w",stdout)
 
 #define PI          2*acos(0.0)
-#define mod         1000000007
+#define mod         10007
 #define INF         LLONG_MAX
 #define sqr(n)      (n*n)
 
@@ -81,39 +81,108 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 //ll dy[]={-1, 0, +1, +1, +1, 0, -1, -1};
 
 //------------------------------------------------------
+ll md;
+struct matrix
+{
+    ll row,col;
+    ll mat[6][6];
+    matrix(ll _row=0,ll _col=0)
+    {
+        row=_row;
+        col=_col;
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                mat[i][j]=0;
+    }
+    matrix operator*(const matrix &B)const
+    {
+        ll i,j,k;
+        matrix temp(row,B.col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<B.col; j++)
+                for(ll k=0; k<col; k++)
+                    temp.mat[i][j]=(temp.mat[i][j]+
+                                    (mat[i][k]*B.mat[k][j])%md)%md;
+        return temp;
+    }
+    matrix operator+(const matrix &B)const
+    {
+        ll i,j;
+        matrix temp(row,col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                temp.mat[i][j]=(mat[i][j]+B.mat[i][j])%md;
+        return temp;
+    }
+};
+matrix PowerMat(matrix A,ll P)
+{
+    ll i;
+    matrix R(A.row,A.col);
+    for(ll i=0; i<R.row; i++)
+        R.mat[i][i]=1;
+    while(P)
+    {
+        if(P&1) R=(R*A);
+        P>>=1;
+        A=(A*A);
+    }
+    return R;
+}
+
 
 
 int main()
 {
-    _F_in;
     ll t=ILL;
     for(ll cs=1; cs<=t; cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
-        for(ll i=1; i<=n; i++)
+        pf("Case %lld:\n",cs);
+        ll a1=ILL, b1=ILL, c1=ILL;
+        ll a2=ILL, b2=ILL, c2=ILL;
+        ll f0=ILL, f1=ILL, f2=ILL;
+        ll g0=ILL, g1=ILL, g2=ILL;
+        md=ILL;
+        ll q=ILL;
+        for(ll i=1; i<=q; i++)
         {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
-        }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
-        {
-            if(Arr[i]!=i)
+            ll n=ILL;
+            if(n>=3)
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
+                matrix A(6,6), B(6,1), C(6,1), D(6, 6);
+                A.mat[0][0]=a1,
+                A.mat[0][1]=b1,
+                A.mat[0][5]=c1,
+                A.mat[1][0]=1,
+                A.mat[2][1]=1,
+                A.mat[3][2]=c2,
+                A.mat[3][3]=a2,
+                A.mat[3][4]=b2,
+                A.mat[4][3]=1,
+                A.mat[5][4]=1;
+
+                B.mat[0][0]=f2,
+                B.mat[1][0]=f1,
+                B.mat[2][0]=f0,
+                B.mat[3][0]=g2,
+                B.mat[4][0]=g1,
+                B.mat[5][0]=g0;
+
+                D = PowerMat(A, n-2);
+                C = D*B;
+                pf("%lld %lld\n",C.mat[0][0],C.mat[3][0]);
+            }
+            else
+            {
+                if(n==2)
+                    pf("%lld %lld\n",f2%md, g2%md);
+                else if(n==1)
+                    pf("%lld %lld\n",f1%md, g1%md);
+                else
+                    pf("%lld %lld\n",f0%md, g0%md);
             }
         }
-        pf("Case %lld: %lld\n",cs, count);
+
     }
     return 0;
 }

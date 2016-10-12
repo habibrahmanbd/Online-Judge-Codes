@@ -87,33 +87,36 @@ int main()
 {
     _F_in;
     ll t=ILL;
-    for(ll cs=1; cs<=t; cs++)
+    for(ll cs=1;cs<=t;cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
-        for(ll i=1; i<=n; i++)
-        {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
-        }
+        ll len = ILL;
+
+        string str;
+        cin>>str;
+
+        ll now=0;
+        ll Ans=0;
         ll count=0;
-        for(ll i=1; i<=n; i++)
+        bool flag=0;
+        for(ll i=0; i<len; i++)
         {
-            if(Arr[i]!=i)
+            if(str[i]=='.'||flag)
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
+                flag=1;
                 count++;
             }
+            if(count==3)
+            {
+                Ans++;
+                count=0;
+                flag=0;
+            }
         }
-        pf("Case %lld: %lld\n",cs, count);
+        if(count>0)
+            Ans++;
+        if(now>0)
+            Ans++;
+        pf("Case %lld: %lld\n",cs, Ans);
     }
     return 0;
 }

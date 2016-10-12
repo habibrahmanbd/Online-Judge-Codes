@@ -81,39 +81,71 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 //ll dy[]={-1, 0, +1, +1, +1, 0, -1, -1};
 
 //------------------------------------------------------
+ll md;
+struct matrix
+{
+    ll row,col;
+    ll mat[2][2];
+    matrix(ll _row=0,ll _col=0)
+    {
+        row=_row;
+        col=_col;
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                mat[i][j]=0;
+    }
+    matrix operator*(const matrix &B)const
+    {
+        ll i,j,k;
+        matrix temp(row,B.col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<B.col; j++)
+                for(ll k=0; k<col; k++)
+                    temp.mat[i][j]=(temp.mat[i][j]+
+                                    (mat[i][k]*B.mat[k][j])%md)%md;
+        return temp;
+    }
+    matrix operator+(const matrix &B)const
+    {
+        ll i,j;
+        matrix temp(row,col);
+        for(ll i=0; i<row; i++)
+            for(ll j=0; j<col; j++)
+                temp.mat[i][j]=(mat[i][j]+B.mat[i][j])%md;
+        return temp;
+    }
+};
+matrix PowerMat(matrix A,ll P)
+{
+    ll i;
+    matrix R(A.row,A.col);
+    for(ll i=0; i<R.row; i++)
+        R.mat[i][i]=1;
+    while(P)
+    {
+        if(P&1) R=(R*A);
+        P>>=1;
+        A=(A*A);
+    }
+    return R;
+}
 
 
 int main()
 {
     _F_in;
     ll t=ILL;
-    for(ll cs=1; cs<=t; cs++)
+    matrix D(2,2),A(2,2), B(2,1),C(2,1);
+    A.mat[0][0]=1, A.mat[0][1]=1, A.mat[1][0]=1, A.mat[1][1]=0;
+    ll mm[]={-1 , 10, 100, 1000, 10000};
+    for(ll cs=1; cs<=t ; cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
-        for(ll i=1; i<=n; i++)
-        {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
-        }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
-        {
-            if(Arr[i]!=i)
-            {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
-            }
-        }
-        pf("Case %lld: %lld\n",cs, count);
+        ll a=ILL, b=ILL, n=ILL, m=ILL;
+        B.mat[0][0]=b, B.mat[1][0]=a;
+        md=mm[m];
+        D = PowerMat(A,n);
+        C = D * B;
+        pf("Case %lld: %lld\n",cs, C.mat[1][0]);
     }
     return 0;
 }

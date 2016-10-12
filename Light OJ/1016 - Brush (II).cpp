@@ -89,31 +89,29 @@ int main()
     ll t=ILL;
     for(ll cs=1; cs<=t; cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
+        ll n=ILL, w=ILL;
+        vector<pll> v;
         for(ll i=1; i<=n; i++)
         {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
+            ll x=ILL, y=ILL;
+            v.pb(mp(y,x));
         }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
+        sort(all(v));
+        ll Ans=1;
+        ll sum=v[0].fs+w;
+        for(ll i=1; i<n; i++)
         {
-            if(Arr[i]!=i)
+            if(v[i].fs<=sum)
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
+                continue;
+            }
+            else
+            {
+                sum = v[i].fs+w;
+                Ans++;
             }
         }
-        pf("Case %lld: %lld\n",cs, count);
+        pf("Case %lld: %lld\n",cs, Ans);
     }
     return 0;
 }

@@ -82,38 +82,65 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 
 //------------------------------------------------------
 
+#define mx 1004
+ll n, m;
+ll Arr[mx];
+ll mxR=-1;
+ll Solve(ll cap)
+{
+    ll sum=0, Ret=1;
+    for(ll i=1 ; i<=n; i++)
+    {
+        if(Arr[i]>cap)
+            return mod;
+        if(sum+Arr[i]<=cap)
+            sum+=Arr[i];
+        else
+        {
+            Ret++;
+            sum= Arr[i];
+        }
+    }
+    return Ret;
+}
+
 
 int main()
 {
-    _F_in;
     ll t=ILL;
     for(ll cs=1; cs<=t; cs++)
     {
-        ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
+        pf("Case %lld: ",cs);
+        n=ILL, m=ILL;
+        ll temp=-1;
         for(ll i=1; i<=n; i++)
         {
             Arr[i]=ILL;
-            Brr[Arr[i]]=i;
+            temp = max(temp, Arr[i]);
         }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
+        if(m>=n)
+            pf("%lld\n",temp);
+        else
         {
-            if(Arr[i]!=i)
+            ll lw=1, hi=mod, Ans;
+            ll tot=mod;
+            while(lw<hi)
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
+                if(lw +1 == hi)
+                {
+                    if(Solve(lw)>m)
+                        lw=hi;
+                    break;
+                }
+                ll mid = (lw+hi)>>1;
+                Ans=Solve(mid);
+                if(Ans>m)
+                    lw = mid+1;
+                else
+                    hi = mid;
             }
+            pf("%lld\n", lw);
         }
-        pf("Case %lld: %lld\n",cs, count);
     }
     return 0;
 }

@@ -85,35 +85,65 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 
 int main()
 {
-    _F_in;
     ll t=ILL;
     for(ll cs=1; cs<=t; cs++)
     {
         ll n=ILL;
-        ll Arr[n+1];
-        ll Brr[102];
-        for(ll i=1; i<=n; i++)
+        ll Amr[n+1];
+        ll Op[n+1];
+        for(ll i=0; i<n; i++) Amr[i]=ILL;
+        for(ll i=0; i<n; i++) Op[i]=ILL;
+        sort(Amr, Amr+n);
+        sort(Op, Op+n);
+        bool vis1[n],vis2[n];
+        clr(vis1,0);
+        clr(vis2,0);
+        ll Ans=0;
+        for(ll i=0; i<n; i++)
         {
-            Arr[i]=ILL;
-            Brr[Arr[i]]=i;
-        }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
-        {
-            if(Arr[i]!=i)
+            ll in;
+            ll mx=-1;
+            for(ll j=0; j<n ; j++)
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
+                if(!vis2[j]&&Op[j]<Amr[i])
+                {
+                    if(mx<Op[j])
+                    {
+                        in=j;
+                        mx=Op[j];
+                    }
+                }
+            }
+            if(mx!=-1)
+            {
+                vis2[in]=1;
+                vis1[i]=1;
+                Ans+=2;
             }
         }
-        pf("Case %lld: %lld\n",cs, count);
+        for(ll i=0; i<n; i++)
+        {
+            if(vis1[i])
+                continue;
+            ll in;
+            ll mx=-1;
+            for(ll j=0; j<n ; j++)
+            {
+                if(!vis2[j]&&Op[j]==Amr[i])
+                {
+                    in=j;
+                    mx=Op[j];
+                    break;
+                }
+            }
+            if(mx!=-1)
+            {
+                vis2[in]=1;
+                vis1[i]=1;
+                Ans+=1;
+            }
+        }
+        pf("Case %lld: %lld\n",cs,Ans);
     }
     return 0;
 }

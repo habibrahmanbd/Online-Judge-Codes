@@ -85,35 +85,36 @@ inline double RAD(double x) { return (x*(double)PI)/(180.0);}
 
 int main()
 {
-    _F_in;
+//    _F_in;
     ll t=ILL;
-    for(ll cs=1; cs<=t; cs++)
+    for(ll cs=1;cs<=t;cs++)
     {
         ll n=ILL;
         ll Arr[n+1];
-        ll Brr[102];
         for(ll i=1; i<=n; i++)
-        {
             Arr[i]=ILL;
-            Brr[Arr[i]]=i;
-        }
-        ll count=0;
-        for(ll i=1; i<=n; i++)
+        vector<ll> dis;
+        dis.pb(Arr[1]);
+        ll x = Arr[1];
+        for(ll i=2; i<=n; i++)
         {
-            if(Arr[i]!=i)
+            dis.pb((Arr[i]-Arr[i-1]));
+            x = max(x, dis[i-1]);
+        }
+        ll Maximum_Strength  = x, Energy = x;
+        for(ll i=0; i<n; i++)
+        {
+            if(dis[i]<Energy)
+                continue;
+            else if(Energy==dis[i])
+                Energy--;
+            else if(Energy<dis[i])
             {
-//                cout<<"Before: "<<i<< " "<<Arr[i]<<endl;
-                ll data_i = Arr[i];
-                Arr[i]=i;
-                ll pos_i_i = Brr[i];
-                Brr[i]=i;
-                Arr[pos_i_i]=data_i;
-                Brr[data_i]=pos_i_i;
-//                cout<<"After: "<<i<<" "<<Arr[i]<<endl;
-                count++;
+                Maximum_Strength++;
+                break;
             }
         }
-        pf("Case %lld: %lld\n",cs, count);
+        pf("Case %lld: %lld\n",cs, Maximum_Strength);
     }
     return 0;
 }
